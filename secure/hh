@@ -1,0 +1,365 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+echo "Welcome, " . $_SESSION['username'];
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /********************************** Styling Begin **********************************/
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .header {
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Added to space out the items */
+        }
+        .header img {
+            height: 50px;
+            margin-right: 20px;
+            
+        }
+        img {
+  border-radius: 50%;
+}
+        .logout-icon {
+            cursor: pointer;
+            background-color: #45a049;
+            border: 2px;
+        }
+        .logout-icon img {
+            height: 30px;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+        }
+        .dashboard {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .dashboard h2 {
+            margin-top: 0;
+        }
+        .dashboard label {
+            display: block;
+            margin-top: 10px;
+        }
+        .dashboard input[type="text"],
+        .dashboard input[type="email"],
+        .dashboard input[type="time"],
+        .dashboard input[type="search"],
+        .dashboard input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 4px;
+        }
+        .dashboard input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .dashboard input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .search-results {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .photo-gallery img {
+            width: calc(33.333% - 10px);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 768px) {
+            .photo-gallery img {
+                width: calc(50% - 10px);
+            }
+        }
+        @media (max-width: 480px) {
+            .photo-gallery img {
+                width: 100%;
+            }
+        }
+        .download-section {
+            margin-top: 20px;
+        }
+        .download-section a {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: #f2f2f2;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .download-section a:hover {
+            background-color: #ddd;
+        }
+        /********************************** Styling End **********************************/
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <img src="images/visit.jfif" alt="Travel Uganda">
+            <h1>Travel Uganda Surprise & Acquire Moments Originary (TUSAMO)</h1>
+        </div>
+        <button class="logout-icon" onclick="logout()">
+            <img src="" alt="Logout">
+        </button>
+    </div>
+    <div class="container">
+        <div class="dashboard">
+            <h2>BOOK NOW</h2>
+        <a  href="bookings.php">Book a ticket</a>
+            <form action="book.php" method="post" id="bookingForm">
+                <label for="search">Search:</label>
+                <input type="search" id="search" name="search" placeholder="Search bookings...">
+    </form>
+    </div>
+        <div class="content">
+            <div id="searchResults" class="search-results"></div>
+            <h2>Available Places</h2>
+            <table id="placesTable">
+                <thead>
+                    <tr>
+                        <th>Place Name</th>
+                        <th>Description</th>
+                        <th>Visit Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Kabale National Park</td>
+                        <td>Recreation and Adventure</td>
+                        <td>89%</td>
+                    </tr>
+                    <tr>
+                        <td>Entebbe Botanic Gardens</td>
+                        <td>Recreation</td>
+                        <td>88%</td>
+                    </tr>
+                    <tr>
+                        <td>Lake Bunyonyi</td>
+                        <td>Adventure</td>
+                        <td>94%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="download-section">
+                <a href="https://www.scribd.com/document/482696807/Tourism-Book-01-pdf" download>Tourism Book (PDF)</a>
+                <a href="http://elibrary.gci.edu.np/bitstream/123456789/3258/1/Bt.467%20Dictionary%20of%20Travel%2C%20Tourism%20and%20Hospitality%2C%20Third%20Edition%20by%20S.%20Medlik.pdf" download>Dictionary and Hospitality (PDF)</a>
+                <a href="https://www.researchgate.net/publication/232723106_Worldwide_Destinations_The_geography_of_travel_and_tourism" download>World Destination</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logout function
+        function logout() {
+            window.location.href = 'logout.php';
+        }
+
+        // Booking form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const place = document.getElementById('place').value;
+
+            const bookingInfo = `Date: ${date}, Time: ${time}, Place: ${place}`;
+            alert('Booking Confirmed: ' + bookingInfo);
+
+            this.submit();
+        });
+    </script>
+</body>
+</html>
+z
+
+
+
+
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+echo "Welcome, " . $_SESSION['username'];
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header img {
+            height: 50px;
+        }
+        .logout-icon {
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+        }
+        .logout-icon img {
+            height: 30px;
+        }
+        
+        .container {
+            padding: 20px;
+        }
+        .payment-section {
+            margin-top: 20px;
+        }
+        .payment-section label {
+            font-weight: bold;
+        }
+        .payment-section input[type="text"],
+        .payment-section input[type="number"],
+        .payment-section select {
+            margin-top: 5px;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .payment-section .payment-errors {
+            color: red;
+            margin-top: 10px;
+        }
+        .payment-section button {
+            padding: 10px 20px;
+            background-color: #0000FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .payment-section button:hover {
+            background-color: #45a049;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="images/visit.jfif" alt="Travel Uganda">
+        <button class="logout-icon" onclick="logout()">
+            <img src="images/logout.png" alt="Logout">
+        </button>
+    </div>
+    <div class="container">
+        <h1>Make Payment</h1>
+        <div class="payment-section">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" required>
+            
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="text" id="expiryDate" name="expiryDate" required placeholder="MM/YY">
+
+            <label for="cvv">CVV:</label>
+            <input type="number" id="cvv" name="cvv" required>
+
+            <div class="payment-errors" id="paymentErrors"></div>
+            <button id="submitPayment">Submit Payment</button>
+        </div>
+    </div>
+
+
+    <script>
+        function logout() {
+            window.location.href = 'logout.php';
+        }
+
+        document.getElementById('submitPayment').addEventListener('click', function() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiryDate = document.getElementById('expiryDate').value;
+            const cvv = document.getElementById('cvv').value;
+            
+            if (!cardNumber || !expiryDate || !cvv) {
+                document.getElementById('paymentErrors').textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            alert('Payment Submitted');
+        });
+    </script>
+</body>
+</html>
